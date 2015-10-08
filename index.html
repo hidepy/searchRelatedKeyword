@@ -1,0 +1,108 @@
+<html>
+<head>
+  <title>関連ワード探すよっ！！</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!--
+  2015/09/26 これからすること
+
+  saveボタンを押して、左側のメニュータブに保存した文言が表示されるようにすること
+
+  -->
+
+  <script src="mdl/material.min.js"></script>
+  <link rel="stylesheet" href="mdl/material.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notosansjapanese.css">
+
+  <!--
+  google material ui の参考サイト
+  http://www.getmdl.io/components/index.html
+  -->
+
+  <!-- jQuery from google cdn -->
+  <!--
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+  -->
+  <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+
+  <script type="text/javascript" src="js/createSavedKeywordMenu.js"></script> <!-- メニュー関連 -->
+  <script type="text/javascript" src="js/getRelatedKeyword.js"></script> <!-- 検索全体処理 -->
+  <script type="text/javascript" src="js/getTrendWord.js"></script>
+
+  <script>
+    //画面ロード時の処理
+    $(document).ready(function(){
+      createSavedKeywordMenu(); //左側メニューのロード(createSavedKeywordMenu.js)
+
+      attachEventForKeywordSearch(); //関連キーワード検索系イベント付与 (getRelatedKeyword.js)  
+
+      loadActiveStyle(); //動的スタイルのロード
+    });
+  </script>
+</head>
+
+<body>
+
+<div class="demo-layout-transparent mdl-layout mdl-js-layout">
+  <header class="mdl-layout__header mdl-layout__header--transparent">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">関連キーワード探すよっ！</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation -->
+      <!--<nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link A...</a>
+        <a class="mdl-navigation__link" href="">Link B...</a>
+        <a class="mdl-navigation__link" href="">Link C...</a>
+        <a class="mdl-navigation__link" href="">Link D...</a>
+      </nav>-->
+    </div>
+  </header>
+
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">saved keywords</span>
+    <nav class="mdl-navigation" id="saved_keywords_menu">
+      <!--
+      <a class="mdl-navigation__link" href="">Link 1...</a>
+      <a class="mdl-navigation__link" href="">Link 2...</a>
+      <a class="mdl-navigation__link" href="">Link 3...</a>
+      <a class="mdl-navigation__link" href="">Link 4...</a>
+    -->
+    </nav>
+  </div>
+
+  <main class="mdl-layout__content">
+  	<div id="content_description">
+      <h1>関連キーワードを探すよっ！</h1>
+  		<p>関連キーワードを芋づる式に探索します。<br>
+  		インスピレーションが欲しい時、トレンドワードの分析などに使用してください</p>
+  	</div>
+
+  	<div id="content_main">
+      <button onClick="searchTrendKeyword()" >test</button>
+      <div id="search_input_area" class="mdl-shadow--2dp">
+    		<form action="#">
+          <i class="material-icons">search</i>
+    		  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    		    <input class="mdl-textfield__input" type="text" id="text_rootKeyword" />
+    		    <label class="mdl-textfield__label" for="text_rootKeyword"> input root keyword</label>
+    		  </div>
+        </form>
+      </div>
+
+      <button id="word_save_button" class="mdl-button mdl-js-button mdl-button--raised">save current keyword tree</button>
+      
+      <!-- 探索結果表示 -->
+      <div id="word_display_area" depth="0"></div>
+      
+
+  	</div> <!-- / #content_main -->
+
+  </main>
+</div>
+
+
+</body>
+</html>

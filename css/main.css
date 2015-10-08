@@ -1,0 +1,85 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic);
+
+/* common */
+body{
+	font-family: Avenir, "Open Sans", "Helvetica Neue", Helvetica, Arial, Verdana, Roboto, "游ゴシック", "Yu Gothic", "游ゴシック体", "YuGothic", "メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+/*body{
+	font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+	font-weight: 100 !important;
+}
+*/
+main{
+	text-align: center;
+}
+
+.mdl-layout-title{
+	font-family: 'Noto Sans Japanese','Roboto', serif;
+	font-weight: 100;
+}
+
+h1{
+	font-family: 'Noto Sans Japanese','Roboto', serif;
+	font-weight: 100;
+}
+
+p{
+	font-weight: 100;
+}
+
+.demo-layout-transparent {
+  
+  background: url('../images/P7268187.JPG') center / cover;
+  opacity: 0.85;
+
+}
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-layout__drawer-button {
+  /* This background is dark, so we set text to white. Use 87% black instead if
+     your background is light. */
+  color: white;
+}
+
+.mdl-layout__content{
+	color: white;
+}
+
+#content_main{
+	width: 80%;
+	margin: 10px auto;
+}
+
+/* searchArea */
+#search_input_area{
+	background: rgba(255, 255, 255, 0.5);
+    width: 80%;
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+#search_input_area i.material-icons {
+    vertical-align: middle;
+    color: #ffffff;
+}
+.mdl-textfield__label{
+	color: #484848;
+}
+
+.mdl-textfield__input{
+	border-bottom: 1px solid rgba(0, 0, 0, .3);
+	color: #000;
+	font-family: Avenir, "Open Sans", "Helvetica Neue", Helvetica, Arial, Verdana, Roboto, "游ゴシック", "Yu Gothic", "游ゴシック体", "YuGothic", "メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+.word{
+
+}
+
+#word_display_area{
+	background: #fff;
+	color: #000;
+	padding: 20px;
+	text-align: left;
+}
+
