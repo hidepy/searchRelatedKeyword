@@ -2,48 +2,75 @@ function searchTrendKeyword(node){
 
 	jQuery.ajax({
 		type: "GET",
-		url: "http://kizasi.jp/kizapi.py?type=rank",
-		dataType: "xml",
+		url: "callKizasiTrendAPI.php",
+		dataType: "json",
+		beforeSend: function(data){
+			console.log("before send");
+
+		},
 		success: function(data){
 			console.log("ajax success!!");
 			//console.log(data);
 
-			/*var el_related_words = data.getElementsByTagName("suggestion");
-			var parent_word_val = node.getAttribute("data");
+			var el_display_area = document.getElementById("trend_display_area");
 
-			if(el_related_words && (el_related_words.length > 0)){
-				jQuery.each(el_related_words, function(idx, val){
+			console.log(el_display_area);
 
-					var word = val.getAttribute("data");
+			if(data && data.channel && data.channel.item){
 
-					if(word == parent_word_val){
-						return true;
+				console.log("first if clear");
+
+				if(data.channel.item.length && (data.channel.item.length > 0)){
+
+					//表示エリアのクリア
+					el_display_area.innerHTML = "";
+
+					for(var i = 0; i < data.channel.item.length; i++){
+						var trend_item = data.channel.item[i];
+
+						console.log(trend_item);
+
+						var el_item = document.createElement("div");
+						el_item.className = "trend_item";
+						el_item.innerHTML = trend_item.title;
+						el_item.setAttribute("trend-title", trend_item.title);
+
+
+						el_display_area.appendChild(el_item);
 					}
 
-					var parent_depth = Number(node.getAttribute("depth"));
-
-					var el_word = document.createElement("div");
-					el_word.setAttribute("data", word);
-					el_word.setAttribute("depth", parent_depth + 1);
-					el_word.setAttribute("state", STATE.INITIAL);
-					el_word.className = "word";
-					el_word.innerHTML = word;
-
-					node.appendChild(el_word);
-				});
-
-				attachClickEventToWordElements();
+					setTimeout(attachEventToTrendKeywords, 10);
+				}
+				else{
+					alert("トレンドキーワード情報の取得処理は成功しましたが、結果が0件のようです...");
+				}
 			}
 			else{
-				//suggestion の件数が0件, 又は, 単に失敗した場合
+				alert("トレンドキーワード情報の取得に失敗しました...");
 			}
-*/
 
 		},
 		error: function(data){
 			alert("ajaxで通信エラーが発生しました(" + data + ")");
+			console.log(data);
 		}
 	});
 
 	//return keyword;
+}
+
+/* 検索されたトレンドキーワードにクリックイベントを付与する */
+function attachEventToTrendKeywords(){
+	$(".trend_item").unbind("click");
+
+	$(".trend_item").click(function(event){
+		event.stopPropagation();
+		
+		var el_text_keyword = document.getElementById("text_rootKeyword");
+		el_text_keyword.value = event.target.getAttribute("trend-title");
+		el_text_keyword.focus();
+
+
+	});
+
 }
