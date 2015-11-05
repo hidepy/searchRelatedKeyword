@@ -42,6 +42,7 @@ function loadActiveStyle(){
 //検索エリアにEnterイベントを付与
 function attachEnterEventToSearchArea(){
 
+	/*
 	$("#text_rootKeyword").keypress(function(event){
 		if(event.which == 13){
 			$("#word_display_wrap").fadeOut(800, "swing");
@@ -61,11 +62,51 @@ function attachEnterEventToSearchArea(){
 				el_root.setAttribute("data", root_keyword);
 
 				searchRelatedKeyword(root_keyword, el_root);
+
+				console.log("in attachEnterEventToSearchArea: after searchRelatedKeyword");
 			}
 
 			$("#word_display_wrap").fadeIn(800, "swing");
+
 		}
 	});	
+	*/
+
+	document.getElementById("text_rootKeyword").addEventListener("keydown", function(e){
+		if(e.keyCode == "13"){
+
+			//e.preventDefault();
+
+			console.log("enter pressed!!");
+
+			$("#word_display_wrap").fadeOut(100, "swing");
+
+			var el_words = document.querySelectorAll(".word");
+
+			//if((el_words.length == 0) || confirm(rewrite_confirm_msg)){
+			{
+				e.preventDefault();
+
+				//Enterキーが押下された
+				console.log("search start!!");
+
+				var root_keyword = event.target.value;
+				var el_root = document.getElementById("word_display_area");			
+
+				el_root.innerHTML = ""; //必ず検索結果は上書きされる
+
+				el_root.setAttribute("data", root_keyword);
+
+				searchRelatedKeyword(root_keyword, el_root);
+
+				console.log("in attachEnterEventToSearchArea: after searchRelatedKeyword");
+			}
+
+			$("#word_display_wrap").fadeIn(600, "swing");
+
+			console.log("enter eventfinished");
+		}
+	});
 }
 
 //単語にクリックイベントを付与
@@ -143,6 +184,10 @@ function searchRelatedKeyword(keyword, node){
 		type: "GET",
 		url: "callGoogleSuggestAPI.php?word=" + keyword,
 		dataType: "xml",
+		beforeSend: function(){
+			console.log("in beforesend");
+			console.log("key: " + keyword + ", node: " + node);
+		},
 		success: function(data){
 			console.log("ajax success!!");
 			//console.log(data);
@@ -191,7 +236,13 @@ function searchRelatedKeyword(keyword, node){
 
 		},
 		error: function(data){
-			alert("ajaxで通信エラーが発生しました(" + data + ")");
+			console.log("ajax error...");
+			console.log(data);
+			alert("ajaxで通信エラーが発生しました(" + JSON.stringify(data) + ")");
+
+		},
+		complete: function(data){
+			console.log("ajax complete!!");
 		}
 	});
 
