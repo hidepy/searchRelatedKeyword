@@ -1,3 +1,17 @@
+
+/* トレンドキーワードを表示ボタンClickイベント */
+$(function() {
+	$("#trend_show_button").click(function(){
+		$('#trend_display_wrap .mdl-spinner').css('display', 'block');
+
+		$("#trend_display_area").fadeOut(500, "swing", function(){
+			//$("#trend_display_area .mdl-spinner").css("display": "block");
+			searchTrendKeyword();
+			
+		});
+	});
+});
+
 function searchTrendKeyword(node){
 
 	jQuery.ajax({
@@ -14,7 +28,13 @@ function searchTrendKeyword(node){
 
 			var el_display_area = document.getElementById("trend_display_area");
 
+			// css変更
+			$(el_display_area).css({
+				"-webkid-align-items": "flex-start",
+    			"align-items": "flex-start"
+			});
 			console.log(el_display_area);
+			console.log(data);
 
 			if(data && data.channel && data.channel.item){
 
@@ -38,15 +58,23 @@ function searchTrendKeyword(node){
 
 						el_display_area.appendChild(el_item);
 					}
-
 					setTimeout(attachEventToTrendKeywords, 10);
+					
+					$("#trend_display_area").fadeIn(500, "swing");
+					//$('#trend_display_wrap .mdl-spinner').css('display', 'none');
+					$('#trend_display_wrap .mdl-spinner').fadeOut(500, "swing");
+					
 				}
 				else{
 					alert("トレンドキーワード情報の取得処理は成功しましたが、結果が0件のようです...");
+					$("#trend_display_area").fadeIn(500, "swing");
+					$('#trend_display_wrap .mdl-spinner').fadeOut(500, "swing");
 				}
 			}
 			else{
 				alert("トレンドキーワード情報の取得に失敗しました...");
+				$("#trend_display_area").fadeIn(500, "swing");
+				$('#trend_display_wrap .mdl-spinner').fadeOut(500, "swing");
 			}
 
 		},

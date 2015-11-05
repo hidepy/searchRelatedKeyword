@@ -28,7 +28,7 @@ function loadActiveStyle(){
 
 	for(var i = 0; i < 10; i++){
 		var style = ".word[depth='" + i + "']{";
-		style += "margin-left: " + (i * 6) + "px;";
+		style += "margin-left: " + (i * 3) + "px;";
 		//style += "color: " + arr_depth_color[i] + ";";
 		style += "} ";
 
@@ -44,6 +44,7 @@ function attachEnterEventToSearchArea(){
 
 	$("#text_rootKeyword").keypress(function(event){
 		if(event.which == 13){
+			$("#word_display_wrap").fadeOut(800, "swing");
 
 			var el_words = document.querySelectorAll(".word");
 
@@ -59,28 +60,47 @@ function attachEnterEventToSearchArea(){
 
 				el_root.setAttribute("data", root_keyword);
 
-				$(el_root).append("<ul></ul>");
-
 				searchRelatedKeyword(root_keyword, el_root);
 			}
-		}
-	});
 
+			$("#word_display_wrap").fadeIn(800, "swing");
+		}
+	});	
 }
 
 //単語にクリックイベントを付与
 function attachClickEventToWordElements(){
 	
-	$(".word").unbind("click");
+	$(".word").unbind("click");	
 
 	$(".word[state='" + STATE.INITIAL + "']").click(function(event){
+		
 		event.stopPropagation();
-		$(this).append("<ul></ul>");
-		searchRelatedKeyword(event.target.getAttribute("data"), event.target);
+
+		// 探索は10層まで
+		if(event.target.getAttribute("depth") < 10){
+			searchRelatedKeyword(event.target.getAttribute("data"), event.target);
+		}
+		
 		event.target.setAttribute("state", STATE.CLICKED);
+		/*
+        if( !$(this).hasClass('last_node') ){
+			console.log("まだあるよ！", $(this).children());
+			$(this).append("＊");
+		}
+		*/		
+		$(this).addClass("searched");
+
 	});
 
-	$(this).addClass("searched");
+	// 既にクリックされた単語のクリックイベント
+	$("li.word[state='" + STATE.CLICKED + "']").click(function(event){
+		
+		event.stopPropagation();
+		$(this).children().slideToggle();
+
+	});
+
 }
 
 //保存ボタンにクリックイベントを付与
@@ -88,7 +108,7 @@ function attachClickEventToSaveButton(){
 
 	$("#word_save_button").click(function(event){
 
-		var el_root = document.getElementById("word_display_area").children("ul");
+		var el_root = document.getElementById("word_display_area");
 
 		saveWords(el_root.getAttribute("data"), el_root.innerHTML);
 
@@ -131,6 +151,15 @@ function searchRelatedKeyword(keyword, node){
 			var parent_word_val = node.getAttribute("data");
 
 			if(el_related_words && (el_related_words.length > 0)){
+				//console.log(el_related_words[0].getAttribute("data"), parent_word_val);
+				//探索結果が親と同じワードのみ以外の時、ulを追加
+				if(!((el_related_words.length < 2) && ( parent_word_val == el_related_words[0].getAttribute("data")))){
+					$(node).append("<ul></ul>");
+				}
+				else{
+					$(node).addClass("last_node");
+				}
+//$(node).append("<ul></ul>");
 				jQuery.each(el_related_words, function(idx, val){
 
 					var word = val.getAttribute("data");
@@ -149,12 +178,14 @@ function searchRelatedKeyword(keyword, node){
 					el_word.innerHTML = word;
 
 					$(node).children().append(el_word);
+
 				});
 
 				attachClickEventToWordElements();
 			}
 			else{
 				//suggestion の件数が0件, 又は, 単に失敗した場合
+				$(node).addClass("last_node");
 			}
 
 

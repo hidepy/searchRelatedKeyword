@@ -5,12 +5,12 @@ var copy_confirm_msg = "保存された関連キーワード木を表示しま�
 function createSavedKeywordMenu(){
 
 	var el_menu = document.getElementById("saved_keywords_menu");
-	el_menu.innerHTML = "";
+	el_menu.innerHTML = "<ul id='saved_keywords_list'></ul>";
 
 	var keyword_data = JSON.parse(localStorage.getItem("related_keywords"));
 
 	for(var prop in keyword_data){
-		var el_div = document.createElement("div");
+		var el_div = document.createElement("li");
 		el_div.setAttribute("keyword", prop);
 
 		var el_a = document.createElement("a");
@@ -18,14 +18,14 @@ function createSavedKeywordMenu(){
 		el_a.innerHTML = prop;
 
 		var el_close_button = document.createElement("button");
-		el_close_button.className = "mdl-button mdl-js-button mdl-button--fab delete_saved_keyword";
+		el_close_button.className = "mdl-button mdl-js-button mdl-button--icon mdl-button--colored delete_saved_keyword";
 		//el_close_button.setAttribute("keyword", prop);
-		el_close_button.innerHTML = '<i class="material-icons">delete</i>';
+		el_close_button.innerHTML = '<i class="material-icons">closed</i>';
 
 		el_div.appendChild(el_a);
 		el_div.appendChild(el_close_button);
 
-		el_menu.appendChild(el_div);
+		el_menu.childNodes[0].appendChild(el_div);
 	}
 
 	//イベントを付与
@@ -48,6 +48,8 @@ function attachEventForSavedWords(){
 
 	$(".saved_keyword_a").click(function(event){
 
+		$("#word_display_wrap").fadeOut(800, "swing");
+
 		if(confirm(copy_confirm_msg)){
 			
 			var el_root = document.getElementById("word_display_area");
@@ -61,6 +63,7 @@ function attachEventForSavedWords(){
 			var keyword = event.target.parentNode.getAttribute("keyword");
 
 			el_root.innerHTML = keyword_data[keyword];
+			$("#word_display_wrap").fadeIn(800, "swing");
 
 			document.getElementById("text_rootKeyword").value = keyword;
 
@@ -78,7 +81,8 @@ function attachEventForDeleteButton(){
 		if(confirm(delete_confirm_msg)){
 			console.log("delete start!!");
 
-			deleteDataFromStorage(event.target.parentNode.getAttribute("keyword"));
+			//deleteDataFromStorage(event.target.parentNode.getAttribute("keyword"));
+			deleteDataFromStorage(this.parentNode.getAttribute("keyword"));
 
 			createSavedKeywordMenu(); //メニューの内容をリロード
 

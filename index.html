@@ -2,6 +2,7 @@
 <head>
   <title>関連ワード探すよっ！！</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
   <!--
   2015/09/26 これからすること
 
@@ -40,6 +41,32 @@
       attachEventForKeywordSearch(); //関連キーワード検索系イベント付与 (getRelatedKeyword.js)  
 
       loadActiveStyle(); //動的スタイルのロード
+
+    });
+
+    //画面ロード完了後の処理
+    $(window).load(function() {
+      var targetY = $(".mdl-layout").offset().top;
+      $("html,body").animate({scrollTop:targetY}, 1000);
+
+      hTop = $('.mdl-layout__drawer-button').offset().top;
+    });
+
+    $(window).scroll(function () {
+      if($(window).scrollTop() > hTop - 0) {
+
+        var agent = navigator.userAgent;
+        $('.mdl-layout__drawer-button').css('position', 'fixed');
+        //$('.mdl-layout__drawer-button').css('top', '0px');
+
+        if(agent.search(/iPhone/) != -1 || agent.search(/iPod/) != -1 || agent.search(/Android/) != -1){
+          $('.mdl-layout__drawer-button').css('top', '50px');
+        }
+
+      }else{
+
+        $('.mdl-layout__drawer-button').css('position', 'absolute');
+      }
     });
   </script>
 </head>
@@ -47,21 +74,21 @@
 <body>
 
 <div class="demo-layout-transparent mdl-layout mdl-js-layout">
-  <header class="mdl-layout__header mdl-layout__header--transparent">
+  <!--<header class="mdl-layout__header mdl-layout__header--transparent">
     <div class="mdl-layout__header-row">
-      <!-- Title -->
+      
       <span class="mdl-layout-title">関連キーワード探すよっ！</span>
-      <!-- Add spacer, to align navigation to the right -->
+      
       <div class="mdl-layout-spacer"></div>
-      <!-- Navigation -->
-      <!--<nav class="mdl-navigation">
+      
+      <nav class="mdl-navigation">
         <a class="mdl-navigation__link" href="">Link A...</a>
         <a class="mdl-navigation__link" href="">Link B...</a>
         <a class="mdl-navigation__link" href="">Link C...</a>
         <a class="mdl-navigation__link" href="">Link D...</a>
-      </nav>-->
+      </nav>
     </div>
-  </header>
+  </header>-->
 
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">saved keywords</span>
@@ -83,11 +110,6 @@
   	</div>
 
   	<div id="content_main">
-      <button onClick="searchTrendKeyword()" >test</button>
-
-      <div id="trend_display_area">
-
-      </div>
 
       <div id="search_input_area" class="mdl-shadow--2dp">
     		<form action="#">
@@ -99,11 +121,49 @@
         </form>
       </div>
 
-      <button id="word_save_button" class="mdl-button mdl-js-button mdl-button--raised">save current keyword tree</button>
-      
-      <!-- 探索結果表示 -->
-      <div id="word_display_area" depth="0"></div>
-      
+
+      <div id="word_display_wrap" class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+
+          <!-- 探索結果表示 -->
+          <button id="word_save_button" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"><i class="material-icons">playlist_add</i></button>
+          <div class="mdl-tooltip" for="word_save_button">
+            save current keyword tree
+          </div>
+
+          <div id="word_display_area"　class="mdl-card mdl-shadow--2dp" depth="0"></div>
+
+        </div> <!-- /.mdl-cell -->
+      </div> <!-- /.mdl-grid -->
+
+
+      <div class="mdl-grid">
+
+        <div class="mdl-cell mdl-cell--5-col mdl-cell--12-col-tablet">
+          <div id="trend_area" class="mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+              <h2 class="mdl-card__title-text">Trend Keyword</h2>
+              <!--<p class="mdl-card__supporting-text">What is the keyword by which people show the interest now?</p>-->
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <a id="trend_show_button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                show the trend keywords<i class="material-icons">keyboard_arrow_right</i>
+              </a>
+            </div> 
+          </div>
+        </div> <!-- /.mdl-cell -->
+
+        <div id="trend_display_wrap" class="mdl-cell mdl-cell--7-col mdl-cell--12-col-tablet">
+          <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+          <!-- トレンドキーワード結果表示 -->
+          <div id="trend_display_area" class="mdl-card mdl-shadow--2dp">
+            <h2>What is the keyword by which people show the interest now?</h2>
+          </div>
+        </div> <!-- / #trend_display_wrap .mdl-cell -->
+
+      </div> <!-- / .mdl-grid -->
+
+       
 
   	</div> <!-- / #content_main -->
 
